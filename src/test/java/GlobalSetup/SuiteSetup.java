@@ -1,5 +1,6 @@
-package company.com;
+package GlobalSetup;
 
+import org.testng.annotations.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,9 +19,6 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
-
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -30,8 +28,8 @@ public class SuiteSetup {
 	public static WebDriver driver;
 	Properties testProperty = new Properties();
 	FileInputStream globalProperties;
-	ExtentReports report;
-	ExtentTest test;
+	public ExtentReports report;
+	public ExtentTest test;
 	
 	@BeforeTest
 	public void Setup() throws IOException {
@@ -70,21 +68,6 @@ public class SuiteSetup {
 		
 	}
 	
-	@Test
-	public void Test() throws Exception {
-		
-		// Start Test
-		test = report.startTest("Name of Test");
-		
-		// Log info, status, error using text only
-		test.log(LogStatus.INFO, "text info");
-        
-		// Log info, status, error using text and screenshot attachment
-        this.takeScreenshot();
-        test.log(LogStatus.INFO, imagePath() + test.addScreenCapture(imagePath()));
- 
-	}
-	
 	@AfterMethod 
 	public void getResult(ITestResult result) throws Exception{
 		
@@ -99,6 +82,9 @@ public class SuiteSetup {
 		}
 		
 		report.endTest(test);
+		
+		// Set implicit wait
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 	}
 	
 	@AfterTest
